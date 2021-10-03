@@ -184,14 +184,14 @@ struct ring_of_integer{
                 n=std::abs(val.norm());
             }
 
-            //擬似コードにおけるIを実際に集合として管理する代わりに，「既に現れた」ことを示すbool値の配列を用いる
-            //seen_I[a][b]=true <=> a+b\alphaがIに含まれる
+            //擬似コードにおけるIを実際に集合として管理する代わりに，「既に現れた」ことを示すbool値のvectorを用いる．
+            //seen_I[a][b]=true <=> a+b\alphaがIに含まれる．
+            //同時にIの大きさsize_Iも管理する．
             auto [u,v]=x.mod_representative();
             std::vector seen_I(u,std::vector<bool>(v));
-            std::queue<elem> q;
-
             seen_I[0][0]=true;
             T size_I=1;
+            std::queue<elem> q;
             q.emplace(0);
 
             while(!q.empty()){
@@ -213,12 +213,12 @@ struct ring_of_integer{
             std::vector seen_X(u,std::vector<bool>(v));
             for(T a=0;a<u;a++)for(T b=0;b<v;b++)if(seen_I[a][b] && !seen_X[a][b]){
                 elem t=elem(a,b);
-                //Jの代わりにseen_Jを管理する
+                //Jの代わりにseen_J，size_Jを管理する
                 std::vector seen_J(u,std::vector<bool>(v));
-
                 seen_J[0][0]=true;
                 T size_J=1;
                 q.emplace(0);
+
                 while(!q.empty()){
                     //qの先頭元をwとする
                     elem w=q.front();
@@ -329,7 +329,7 @@ struct ring_of_integer{
             }
             std::vector<std::pair<ideal,int>> S;
             //Yの要素を走査する
-            for(int i=0;i<u;i++)for(int j=0;j<v;j++)if(seen_Y[i][j]){
+            for(T i=0;i<u;i++)for(T j=0;j<v;j++)if(seen_Y[i][j]){
                 elem t(i,j);
                 int cnt=0;
                 ideal J({gen[0],t});
